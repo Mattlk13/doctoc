@@ -1,7 +1,5 @@
 # DocToc [![build status](https://secure.travis-ci.org/thlorenz/doctoc.svg)](http://travis-ci.org/thlorenz/doctoc)
 
-<a href="https://www.patreon.com/bePatron?u=8663953"><img alt="become a patron" src="https://c5.patreon.com/external/logo/become_a_patron_button.png" height="35px"></a>
-
 Generates table of contents for markdown files inside local git repository. Links are compatible with anchors generated
 by github or other sites via a command line flag.
 
@@ -49,6 +47,8 @@ by the markdown parser. Doctoc defaults to using the GitHub parser, but other
 [modes can be
 specified](#using-doctoc-to-generate-links-compatible-with-other-sites).
 
+### Ignoring individual files
+In order to ignore a specific file when running `doctoc` on an entire directory, just add `<!-- DOCTOC SKIP -->` to the top of the file you wish to ignore.
 
 ### Update existing doctoc TOCs effortlessly
 
@@ -65,14 +65,6 @@ If you want to convert only specific files, do:
     doctoc README.md
 
     doctoc CONTRIBUTING.md LICENSE.md
-
-You can use this feature to do more sophisticated things. For example, if you
-have [ack][ack] installed, you could add `<!-- DOCTOC SKIP -->` to specific
-files and then use
-
-    ack -L 'DOCTOC SKIP' | xargs doctoc
-
-to recompile only those files which don't have the DOCTOC SKIP comment.
 
 ### Using doctoc to generate links compatible with other sites
 
@@ -123,7 +115,7 @@ Running doctoc will insert the toc at that location.
 
 Use the `--title` option to specify a (Markdown-formatted) custom TOC title; e.g., `doctoc --title '**Contents**' .` From then on, you can simply run `doctoc <file>` and doctoc will will keep the title you specified.
 
-Alternatively, to blank out the title with a newline, use the `--notitle` option. This will simply remove the title from the TOC.
+Alternatively, to blank out the title, use the `--notitle` option. This will simply remove the title from the TOC.
 
 ### Specifying a maximum heading level for TOC entries
 
@@ -140,6 +132,10 @@ You can print to stdout by using the `-s` or `--stdout` option.
 
 [ack]: http://beyondgrep.com/
 
+### Only update existing ToC
+
+Use `--update-only` or `-u` to only update the existing ToC. That is, the Markdown files without ToC will be left untouched. It is good if you want to use `doctoc` with `lint-staged`.
+
 ### Usage as a `git` hook
 
 doctoc can be used as a [pre-commit](http://pre-commit.com) hook by using the
@@ -148,7 +144,7 @@ following configuration:
 ```yaml
 repos:
 -   repo: https://github.com/thlorenz/doctoc
-    sha: ...  # substitute a tagged version
+    rev: ...  # substitute a tagged version
     hooks:
     -   id: doctoc
 ```
